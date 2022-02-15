@@ -21,10 +21,11 @@ class PostController extends Controller
 
     public function store(Post $post, Request $request)
     {
-        # just avoiding errors, but there should be a better way
-        $image = $request->file('image');
-        $path = Storage::disk('s3')->putFile('tabinote', $image, 'public');
-        $post->image_path = Storage::disk('s3')->url($path);
-        $post->fill($request)->save();
+        if ($request->file('image')) {
+            $image = $request->file('image');
+            $path = Storage::disk('s3')->putFile('tabinote', $image, 'public');
+            $post->image_path = Storage::disk('s3')->url($path);            
+        }
+        $post->fill($request->all())->save();
     }    
 }

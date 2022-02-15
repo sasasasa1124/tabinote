@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ImageController;
 use Inertia\Inertia;
 
 /*
@@ -32,6 +33,10 @@ Route::prefix('posts')->group(function (){
     Route::post('fetch',[PostController::class, 'index']);
     Route::get('fetch/{post}',[PostController::class, 'fetch']);
     Route::post('create', [PostController::class, 'store'])->middleware('auth');
+});
+
+Route::prefix('images')->group(function (){
+    Route::post('create',[ImageController::class, 'store']);
 });
 
 Route::post('comments/create', [CommentController::class, 'store'])->middleware('auth');

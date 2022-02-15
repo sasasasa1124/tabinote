@@ -11,6 +11,7 @@ import {
  } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
+import imageCompression from 'browser-image-compression';
 
 const PostForm = () => {
     const [user,setUser] = useState({id: 0, name:'Anonymous'});
@@ -23,10 +24,12 @@ const PostForm = () => {
         lng: '',
         body: '',
     });
+    const [address, setAddress] = useState();
     const [map, setMap] = useState(null);
     const [maps, setMaps] = useState(null);
     const [marker, setMarker] = useState();
     const [loading, setLoading] = useState(false);
+    const [image, setImage] = useState();
 
     useEffect(() => {        
         fetchLocation();
@@ -40,6 +43,21 @@ const PostForm = () => {
     useEffect(() =>{
         setPost({...post, lat: location.lat, lng: location.lng})
     },[location]);
+
+    useEffect(() => {
+        window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+        axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.lat},${location.lng}&key=${process.env.MIX_GOOGLE_API}`,
+        {headers: {
+            "Content-Type": "text/plain",
+            "Access-Control-Allow-Origin": '*',
+            "Access-Control-Allow-Methods": 'GET',
+            "secure": false
+        }})
+        .then((res)=>{
+            console.log(res.data);
+            setAddress(res.data);
+        });
+    },[location])
 
     return (
         <div>
@@ -57,6 +75,7 @@ const PostForm = () => {
                         onGoogleApiLoaded={handleApiLoaded}
                         ></GoogleMapReact>
                     </div>
+                    <p>{address}</p>
                     <FormLabel>Author: <strong>{user.name}</strong></FormLabel>
                     <FormControlLabel control={
                         <Checkbox
@@ -74,6 +93,8 @@ const PostForm = () => {
                     <input
                         accept="image/*" 
                         type="file"
+                        name="image"
+                        onChange={handleImageUpload}
                     />
                 </FormGroup>
                 <LoadingButton
@@ -105,12 +126,6 @@ const PostForm = () => {
             lat: position.coords.latitude,
             lng: position.coords.longitude
         });
-        // axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=${process.env.MIX_GOOGLE_API}`)
-        //     .then((res)=>{
-        //         console.log(res.data);
-        //         setAddress(res.data);
-        //     })
-        
     }
 
     function fetchLocation() {
@@ -143,11 +158,48 @@ const PostForm = () => {
         map.panTo({lat:lat,lng:lng});
     };
 
+    async function handleImageUpload(event) {
+        const imageFile = event.target.files[0];
+        console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
+        console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
+      
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true
+        }
+        try {
+          const compressedFile = await imageCompression(imageFile, options);
+          console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+          console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+          setImage(compressedFile);
+        } catch (error) {
+          console.log(error);
+        }
+    }
+
+    async function uploadImage() {
+        let data = new FormData();
+        data.append('image', image);
+        axios.post('/images/create', data, {headers: {
+            'accept': 'application/json',
+            'Accept-Language': 'en-US,en;q=0.8',
+            'Content-Type': `multipart/form-data; boundary=${data._boundary}`,        
+        }})
+        .then((res) => {
+            console.log(res.data);
+        })
+        .catch((err) => {
+            console.log(err)
+        });
+    }
+
     function handleSubmit(e){
         setLoading(true);
         e.preventDefault();
         axios.post('/posts/create', post)
             .then((res) => {
+                uploadImage();
                 setLoading(false);
                 alert('Your submission has been sent!');
                 console.log(res.data);
