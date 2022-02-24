@@ -16,7 +16,7 @@ class PostController extends Controller
 
     public function fetch(Post $post)
     {
-        return ['post' => $post, 'author' => $post->user, 'comments' => $post->comments];
+        return ['post' => $post, 'author' => $post->user, 'comments' => $post->comments, 'images' => $post->images];
     }
 
     public function store(Post $post, Request $request)
@@ -28,4 +28,9 @@ class PostController extends Controller
         }
         $post->fill($request->all())->save();
     }    
+
+    public function show(Post $post)
+    {
+        return $post;
+    }
 }

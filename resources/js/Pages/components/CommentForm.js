@@ -67,11 +67,13 @@ const CommentForm = (props) => {
             .then((res) => {
                 setLoading(false);
                 alert('Your submission has been sent!');
-                console.log(res.data);
                 history.go(0);
             })
             .catch((err) => {
                 console.log(err);
+                if (err.response.status == 401) {
+                    alert('You need to register to leave comments!');
+                }
             });
     }
 }

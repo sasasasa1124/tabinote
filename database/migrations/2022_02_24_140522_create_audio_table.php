@@ -13,17 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('audio', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->boolean('public');
-            $table->string('title');
-            $table->double('lat');
-            $table->double('lng');
-            $table->text('body');
+            $table->unsignedBigInteger('post_id');
+            $table->string('path');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users');
+            
+            $table->foreign('post_id')->references('id')->on('posts');
         });
     }
 
@@ -34,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('audio');
     }
 };

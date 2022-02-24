@@ -6,11 +6,10 @@ import PostCard from './PostCard';
 import { Container } from 'react-bootstrap';
 
 const PostIndex = (props) => {
-    const [loading, setLoading] = useState(false);
     const defaultCenter = props.defaultCenter;
     const user = props.user;
     const posts = props.posts;
-
+    
     return (
         <Container>
             <div style={{ height: '60vh', width: '100%' }}>
@@ -18,7 +17,7 @@ const PostIndex = (props) => {
                     bootstrapURLKeys={{ key: process.env.MIX_GOOGLE_API }}
                     center={defaultCenter}
                     defaultZoom={13}
-                >{posts.map((post) => {
+                >{posts.length >=1 ? posts.map((post) => {
                 return (
                     <PostCard
                     post={post}
@@ -26,7 +25,7 @@ const PostIndex = (props) => {
                     lng={post.lng}
                     key={post.id}
                     ></PostCard>
-                );})}
+                );}): ''}
                 </GoogleMapReact>
             </div>
         </Container>

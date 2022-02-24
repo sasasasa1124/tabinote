@@ -25,6 +25,7 @@ Route::get('/dashboard', function () {
 
 Route::prefix('users')->group(function (){
     Route::get('fetch',[UserController::class, 'fetch']);
+    Route::get('fetch/private',[UserController::class, 'fetchPrivate']);
     Route::get('fetch/{user}',[UserController::class, 'show']);
     Route::get('index',[UserController::class, 'index']);
 });
@@ -32,11 +33,13 @@ Route::prefix('users')->group(function (){
 Route::prefix('posts')->group(function (){
     Route::post('fetch',[PostController::class, 'index']);
     Route::get('fetch/{post}',[PostController::class, 'fetch']);
-    Route::post('create', [PostController::class, 'store'])->middleware('auth');
+    Route::post('create', [PostController::class, 'store']);
+    // Route::get('{post}', [PostController::class, 'show']);
 });
 
 Route::prefix('images')->group(function (){
     Route::post('create',[ImageController::class, 'store']);
+    Route::get('fetch/{post}', [ImageController::class, 'fetch']);
 });
 
 Route::post('comments/create', [CommentController::class, 'store'])->middleware('auth');

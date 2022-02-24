@@ -1,27 +1,29 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import React from "react";
 
-export default function Footer() {
-  const [value, setValue] = React.useState(0);
+const articleStyle =  {
+  display: "grid",
+  gridTemplateRows: "auto 1fr auto"
+};
 
+const footerStyle =  {
+  display: "flex",
+  justifyContent: "center",
+  padding: "5px",
+  backgroundColor: "#45a1ff",
+  color: "#fff"
+};
+
+const Footer = () => {
   return (
-    <Box sx={{ minWidth: 500 }}>
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-      >
-        <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-        <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-        <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
-      </BottomNavigation>
-    </Box>
-  );
-}
+  <article style={articleStyle}>
+    <ol>
+        <li>github</li>
+        <li>wechat</li>
+    </ol>
+    <footer style={footerStyle}>
+        <p>© 2022 sasasasa1124</p>
+    </footer>
+  </article>);
+};
+
+export default Footer;

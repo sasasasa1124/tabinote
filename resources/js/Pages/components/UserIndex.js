@@ -6,7 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
 const UserIndex = () => {
-    const [users,setUsers] = useState([]);  
+    const [users,setUsers] = useState([]);
 
     useEffect(() => {        
         fetchUsers();

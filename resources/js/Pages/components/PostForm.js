@@ -8,10 +8,13 @@ import {
     Checkbox,
     FormControlLabel,
     FormLabel,
+    IconButton,
  } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import imageCompression from 'browser-image-compression';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import AudioFileIcon from '@mui/icons-material/AudioFile';
 
 const PostForm = () => {
     const [user,setUser] = useState({id: 0, name:'Anonymous'});
@@ -24,12 +27,12 @@ const PostForm = () => {
         lng: '',
         body: '',
     });
-    const [address, setAddress] = useState();
     const [map, setMap] = useState(null);
     const [maps, setMaps] = useState(null);
     const [marker, setMarker] = useState();
     const [loading, setLoading] = useState(false);
     const [image, setImage] = useState();
+    const [audio, setAudio] = useState();
 
     useEffect(() => {        
         fetchLocation();
@@ -43,21 +46,6 @@ const PostForm = () => {
     useEffect(() =>{
         setPost({...post, lat: location.lat, lng: location.lng})
     },[location]);
-
-    useEffect(() => {
-        window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-        axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.lat},${location.lng}&key=${process.env.MIX_GOOGLE_API}`,
-        {headers: {
-            "Content-Type": "text/plain",
-            "Access-Control-Allow-Origin": '*',
-            "Access-Control-Allow-Methods": 'GET',
-            "secure": false
-        }})
-        .then((res)=>{
-            console.log(res.data);
-            setAddress(res.data);
-        });
-    },[location])
 
     return (
         <div>
@@ -75,7 +63,6 @@ const PostForm = () => {
                         onGoogleApiLoaded={handleApiLoaded}
                         ></GoogleMapReact>
                     </div>
-                    <p>{address}</p>
                     <FormLabel>Author: <strong>{user.name}</strong></FormLabel>
                     <FormControlLabel control={
                         <Checkbox
@@ -83,19 +70,41 @@ const PostForm = () => {
                     } label="Public" />
                     <TextField
                     label='title'
+                    inputProps={{ maxLength: 40 }}
                     valiant='Outlined'
                     onChange={(e) => setPost({...post, title: e.target.value})} />
                     <TextField
                     label='body'
+                    inputProps={{ maxLength: 40000 }}
                     valiant='Outlined'
                     multiline
                     onChange={(e) => setPost({...post, body: e.target.value})} />
-                    <input
+                    <label htmlFor="image-button-file">
+                        <input
                         accept="image/*" 
                         type="file"
                         name="image"
+                        id="image-button-file"
                         onChange={handleImageUpload}
+                        hidden
+                        />
+                        <IconButton color="primary" aria-label="upload picture" component="span">
+                        <PhotoCamera />
+                        </IconButton>
+                    </label>
+                    <label htmlFor="audio-button-file">
+                    <input
+                        accept="audio/*" 
+                        type="file"
+                        name="audio"
+                        id='audio-button-file'
+                        onChange={handleAudioUpload}
+                        hidden
                     />
+                        <IconButton color="primary" aria-label="upload picture" component="span">
+                        <AudioFileIcon />
+                        </IconButton>
+                    </label>
                 </FormGroup>
                 <LoadingButton
                     onClick={handleSubmit}
@@ -178,9 +187,30 @@ const PostForm = () => {
         }
     }
 
+    function handleAudioUpload(event) {
+        const audioFile = event.target.files[0];
+        setAudio(audioFile);
+    }
+
     async function uploadImage() {
         let data = new FormData();
         data.append('image', image);
+        axios.post('/images/create', data, {headers: {
+            'accept': 'application/json',
+            'Accept-Language': 'en-US,en;q=0.8',
+            'Content-Type': `multipart/form-data; boundary=${data._boundary}`,        
+        }})
+        .then((res) => {
+            console.log(res.data);
+        })
+        .catch((err) => {
+            console.log(err)
+        });
+    }
+
+    async function uploadAudio() {
+        let data = new FormData();
+        data.append('audio', audio);
         axios.post('/images/create', data, {headers: {
             'accept': 'application/json',
             'Accept-Language': 'en-US,en;q=0.8',
@@ -200,12 +230,16 @@ const PostForm = () => {
         axios.post('/posts/create', post)
             .then((res) => {
                 uploadImage();
+                uploadAudio();
                 setLoading(false);
                 alert('Your submission has been sent!');
                 console.log(res.data);
             })
             .catch((err) => {
                 console.log(err);
+                if (err.response.status == 401) {
+                    alert('You need to register to leave comments!');
+                }                
             });
     }
 }
