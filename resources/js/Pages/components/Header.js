@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
@@ -44,11 +43,11 @@ const Header = (props) => {
             variant="h6"
             noWrap
             component="div"
+            fontFamily='"Segoe UI"'
             sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
           >
-            Tabinote
+            Tabinote<i class="fas fa-leaf"></i>
           </Typography>
-
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -85,13 +84,13 @@ const Header = (props) => {
               key='home'
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: 'white', display: 'block' }}
-            ><a href='/'>Home</a></Button>
+            ><a href='/'>Home <i class="fas fa-home"></i></a></Button>
             {(user.id > 0) ?
             (<Button
               key='private'
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: 'white', display: 'block' }}
-            ><a href='/posts/private'>Private</a></Button>)
+            ><a href='/posts/users'>Yours <i class="fas fa-user-shield"></i></a></Button>)
             :
             (<div></div>)
             }
@@ -99,17 +98,17 @@ const Header = (props) => {
               key='create'
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: 'white', display: 'block' }}
-            ><a href='/posts/create'>Create</a></Button>
+            ><a href='/posts/create'>Create <i class="fas fa-plus"></i></a></Button>
             <Button
               key='about'
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: 'white', display: 'block' }}
-            ><a href='/about'>About</a></Button>
+            ><a href='/about'>About <i class="fas fa-info-circle"></i></a></Button>
           </Box>
           <Box sx={{ flexGrow: 0 }}>  
         <Tooltip title="Open settings">
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+            <i class="fas fa-user"></i>
           </IconButton>
         </Tooltip>
         <Menu
@@ -132,21 +131,23 @@ const Header = (props) => {
           {(user.id > 0) ?
               (
                 <div>
-                  <MenuItem key='home' onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center"><a href='/'>Home</a></Typography>
-                  </MenuItem>
-                  <MenuItem key='create' onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center"><a href='/posts/create'>Create</a></Typography>
-                  </MenuItem>
-                  <MenuItem key='about' onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center"><a href='/about'>About</a></Typography>
+                  <MenuItem key='log_out' onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">
+                      <form id="logout-form" action="/logout" method="POST" style={{display:'none'}}>
+                        <input type="hidden" name="_token" value={ document.head.querySelector('meta[name="csrf-token"]').content } />
+                      </form>
+                      <button type="submit">Log Out</button>
+                    </Typography>
                   </MenuItem>
                 </div>
               ) : 
               (
                 <div>
-                  <MenuItem key='' onClick={handleCloseUserMenu}>
+                  <MenuItem key='login' onClick={handleCloseUserMenu}>
                     <Typography textAlign="center"><a href='/login'>Login</a></Typography>
+                  </MenuItem>
+                  <MenuItem key='register' onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center"><a href='/register'>Register</a></Typography>
                   </MenuItem>
                 </div>
               )

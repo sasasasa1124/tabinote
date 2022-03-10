@@ -33,4 +33,9 @@ class PostController extends Controller
     {
         return $post;
     }
+
+    public function usersIndex(Request $request)
+    {
+        return Post::where('user_id',$request->id)->get();
+    }
 }

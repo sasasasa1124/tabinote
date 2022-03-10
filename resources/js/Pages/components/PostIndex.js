@@ -9,6 +9,7 @@ const PostIndex = (props) => {
     const defaultCenter = props.defaultCenter;
     const user = props.user;
     const posts = props.posts;
+    const location = props.location;
     
     return (
         <Container>
@@ -24,6 +25,8 @@ const PostIndex = (props) => {
                     lat={post.lat}
                     lng={post.lng}
                     key={post.id}
+                    location={location}
+                    user={user}
                     ></PostCard>
                 );}): ''}
                 </GoogleMapReact>

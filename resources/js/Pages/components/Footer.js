@@ -16,13 +16,9 @@ const footerStyle =  {
 const Footer = () => {
   return (
   <article style={articleStyle}>
-    <ol>
-        <li>github</li>
-        <li>wechat</li>
-    </ol>
     <footer style={footerStyle}>
-        <p>© 2022 sasasasa1124</p>
-    </footer>
+        <p>© 2022 <a href='https://github.com/sasasasa1124'>@sasasasa1124</a></p>
+    </footer>    
   </article>);
 };
 

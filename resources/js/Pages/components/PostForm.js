@@ -15,6 +15,7 @@ import SendIcon from '@mui/icons-material/Send';
 import imageCompression from 'browser-image-compression';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import AudioFileIcon from '@mui/icons-material/AudioFile';
+import { Form } from 'react-bootstrap';
 
 const PostForm = () => {
     const [user,setUser] = useState({id: 0, name:'Anonymous'});
@@ -63,48 +64,62 @@ const PostForm = () => {
                         onGoogleApiLoaded={handleApiLoaded}
                         ></GoogleMapReact>
                     </div>
-                    <FormLabel>Author: <strong>{user.name}</strong></FormLabel>
-                    <FormControlLabel control={
-                        <Checkbox
-                        onChange={(e) => setPost({...post, public: (e.target.value == 'on')})} />
-                    } label="Public" />
-                    <TextField
-                    label='title'
-                    inputProps={{ maxLength: 40 }}
-                    valiant='Outlined'
-                    onChange={(e) => setPost({...post, title: e.target.value})} />
-                    <TextField
-                    label='body'
-                    inputProps={{ maxLength: 40000 }}
-                    valiant='Outlined'
-                    multiline
-                    onChange={(e) => setPost({...post, body: e.target.value})} />
-                    <label htmlFor="image-button-file">
-                        <input
-                        accept="image/*" 
-                        type="file"
-                        name="image"
-                        id="image-button-file"
-                        onChange={handleImageUpload}
-                        hidden
-                        />
-                        <IconButton color="primary" aria-label="upload picture" component="span">
-                        <PhotoCamera />
-                        </IconButton>
-                    </label>
-                    <label htmlFor="audio-button-file">
-                    <input
-                        accept="audio/*" 
-                        type="file"
-                        name="audio"
-                        id='audio-button-file'
-                        onChange={handleAudioUpload}
-                        hidden
-                    />
-                        <IconButton color="primary" aria-label="upload picture" component="span">
-                        <AudioFileIcon />
-                        </IconButton>
-                    </label>
+                    <FormGroup>
+                        <FormLabel>Author: <strong>{user.name}</strong></FormLabel>
+                    </FormGroup>
+                    <FormGroup>
+                        <FormControlLabel control={
+                            <Checkbox
+                            onChange={(e) => setPost({...post, public: (e.target.value == 'on')})} />
+                        } label="Public" />
+                    </FormGroup>
+                    <FormGroup>
+                        <TextField
+                        label='title'
+                        inputProps={{ maxLength: 40 }}
+                        valiant='Outlined'
+                        onChange={(e) => setPost({...post, title: e.target.value})} />
+                    </FormGroup>
+                    <FormGroup>
+                        <TextField
+                        label='body'
+                        inputProps={{ maxLength: 40000 }}
+                        valiant='Outlined'
+                        multiline
+                        rows={10}
+                        onChange={(e) => setPost({...post, body: e.target.value})} />
+                    </FormGroup>
+                    <FormGroup>
+                        <label htmlFor="image-button-file">
+                            <input
+                            accept="image/*" 
+                            type="file"
+                            name="image"
+                            id="image-button-file"
+                            onChange={handleImageUpload}
+                            hidden
+                            />
+                            <IconButton color="primary" aria-label="upload picture" component="span">
+                            <PhotoCamera />
+                            </IconButton>
+                        </label>
+                        <label htmlFor="audio-button-file">
+                            <input
+                                accept="audio/*" 
+                                type="file"
+                                name="audio"
+                                id='audio-button-file'
+                                onChange={handleAudioUpload}
+                                hidden
+                            />
+                                <IconButton color="primary" aria-label="upload picture" component="span">
+                                <AudioFileIcon />
+                                </IconButton>
+                        </label>                        
+                    </FormGroup>
+
+
+
                 </FormGroup>
                 <LoadingButton
                     onClick={handleSubmit}

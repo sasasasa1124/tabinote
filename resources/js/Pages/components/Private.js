@@ -8,8 +8,6 @@ import {
 const Private = () => {
     const [location,setLocation] = useState({})
     const [user,setUser] = useState({id: 0, name:'Anonymous'}); 
-    const [map, setMap] = useState(null);
-    const [maps, setMaps] = useState(null);
     const [posts, setPosts] = useState([]);
 
     useEffect(() => {        
@@ -27,6 +25,7 @@ const Private = () => {
             defaultCenter={location}
             user={user}
             posts={posts}
+            location={location}
             ></PostIndex>
         </Container>
     );
@@ -62,8 +61,9 @@ const Private = () => {
     }
 
     function fetchPosts() {
-        axios.post('/users/fetch/private')
+        axios.post('/posts/users/fetch',user)
             .then((res)=>{
+                console.log(res.data);
                 setPosts(res.data);
             });
     }

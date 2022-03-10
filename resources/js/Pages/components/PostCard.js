@@ -9,7 +9,29 @@ import CardMedia from '@mui/material/CardMedia';
 import axios from 'axios';
 
 const PostCard = (props) => {
-    const [loading, setLoading] = useState(false);
+    function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+        var R = 6371; // Radius of the earth in km
+        var dLat = deg2rad(lat2-lat1);  // deg2rad below
+        var dLon = deg2rad(lon2-lon1); 
+        var a = 
+          Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+          Math.sin(dLon/2) * Math.sin(dLon/2)
+          ; 
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        var d = R * c; // Distance in km
+        return d;
+      }
+      
+      function deg2rad(deg) {
+        return deg * (Math.PI/180)
+      }
+
+      const currentLocation = props.location;
+      const post = props.post;
+      const user = props.user;
+      const distance = getDistanceFromLatLonInKm(currentLocation.lat, currentLocation.lng, post.lat, post.lng);
+
 
     return (
         // use the thumbnails to display the images, possiblly using carousel?
@@ -19,16 +41,19 @@ const PostCard = (props) => {
                     {props.post.title}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    {new Date(props.post.created_at).toLocaleString()}
-                </Typography>
-                <Typography variant="body">
-                    {props.post.body}
-                </Typography>        
+                    {new Date(post.created_at).toLocaleString()}
+                </Typography>       
             </CardContent>
             <CardActions>
-                <a href={'/posts/' + props.post.id}>
-                    <Button size="small">detail...</Button>
-                </a>
+                {
+                    (distance < 4.0 || post.user_id == user.id)
+                    ?
+                        (<a href={'/posts/' + post.id}>
+                            <Button size="small">detail...</Button>
+                        </a>)                    
+                    :
+                        (<p>you need to get closer to see detail...</p>)
+                }
             </CardActions>
         </Card>
     );    

@@ -25,7 +25,6 @@ Route::get('/dashboard', function () {
 
 Route::prefix('users')->group(function (){
     Route::get('fetch',[UserController::class, 'fetch']);
-    Route::get('fetch/private',[UserController::class, 'fetchPrivate']);
     Route::get('fetch/{user}',[UserController::class, 'show']);
     Route::get('index',[UserController::class, 'index']);
 });
@@ -34,6 +33,7 @@ Route::prefix('posts')->group(function (){
     Route::post('fetch',[PostController::class, 'index']);
     Route::get('fetch/{post}',[PostController::class, 'fetch']);
     Route::post('create', [PostController::class, 'store']);
+    Route::post('users/fetch', [PostController::class, 'usersIndex']);
     // Route::get('{post}', [PostController::class, 'show']);
 });
 

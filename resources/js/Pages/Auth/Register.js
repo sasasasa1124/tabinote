@@ -12,6 +12,7 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
+        image_path: '',
     });
 
     useEffect(() => {
@@ -92,6 +93,18 @@ export default function Register() {
                         required
                     />
                 </div>
+
+                <div className="mt-4">
+                    <Label forInput="image_path" value="Image_path" />
+
+                    <Input
+                        type="file"
+                        name="image_path"
+                        value={data.image_path}
+                        className="mt-1 block w-full"
+                        handleChange={onHandleChange}
+                    />
+                </div>                
 
                 <div className="flex items-center justify-end mt-4">
                     <Link href={route('login')} className="underline text-sm text-gray-600 hover:text-gray-900">

@@ -23,9 +23,9 @@ import {
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './components/Home';
-import PostShow from './components/PostShow';
-import PostForm from './components/PostForm';
+import Detail from './components/Detail';
 import Private from './components/Private'
+import PostForm from './components/PostForm';
 import UserIndex from './components/UserIndex';
 import UserShow from './components/UserShow';
 import NotFound from './components/NotFound';
@@ -40,8 +40,8 @@ function App() {
                         <Routes>
                             <Route exact path="/" element={<Home />} />
                             <Route exact path="/posts/create" element={<PostForm />} />
-                            <Route exact path="/posts/private" element={<Private />} />
-                            <Route exact path="/posts/:id" element={<PostShow />} />
+                            <Route exact path="/posts/users" element={<Private />} />
+                            <Route exact path="/posts/:id" element={<Detail />} />
                             <Route exact path="/users" element={<UserIndex />} />
                             <Route path="/users/:id" element={<UserShow />} />
                             <Route element={<NotFound />} />

@@ -18,13 +18,13 @@ const CommentIndex = (props) => {
                     <Card
                     key={comment.id}
                     >
-                        <CardContent>                         
+                        <CardContent>              
                         <Typography variant="body">
                             {comment.body}
                         </Typography>
                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
                             {comment.created_at}
-                        </Typography>                           
+                        </Typography>
                         </CardContent>
                     </Card>
                 )
@@ -44,5 +44,3 @@ const CommentIndex = (props) => {
 }
 
 export default CommentIndex;
-
-

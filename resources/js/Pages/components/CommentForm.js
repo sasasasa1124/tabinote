@@ -44,10 +44,9 @@ const CommentForm = (props) => {
                 variant="contained"
             >
                 Leave Comments
-            </LoadingButton>    
+            </LoadingButton>
             </FormGroup>
         </div>
-
     );
 
     function fetchUser() {
@@ -79,5 +78,3 @@ const CommentForm = (props) => {
 }
 
 export default CommentForm;
-
-
