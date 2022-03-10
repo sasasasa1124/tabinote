@@ -46,7 +46,7 @@ const PostCard = (props) => {
             </CardContent>
             <CardActions>
                 {
-                    (distance < 4.0 || post.user_id == user.id)
+                    (distance < 4.0 || post.user_id == user.id || post.public == true)
                     ?
                         (<a href={'/posts/' + post.id}>
                             <Button size="small">detail...</Button>

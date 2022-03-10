@@ -46,7 +46,7 @@ const Header = (props) => {
             fontFamily='"Segoe UI"'
             sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
           >
-            Tabinote<i class="fas fa-leaf"></i>
+            TabiNote<i class="fas fa-leaf"></i>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
