@@ -32,7 +32,6 @@ const PostCard = (props) => {
       const user = props.user;
       const distance = getDistanceFromLatLonInKm(currentLocation.lat, currentLocation.lng, post.lat, post.lng);
 
-
     return (
         // use the thumbnails to display the images, possiblly using carousel?
         <Card sx={{ minWidth: 275 }}>
@@ -42,7 +41,10 @@ const PostCard = (props) => {
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                     {new Date(post.created_at).toLocaleString()}
-                </Typography>       
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                    {distance} km from your location
+                </Typography>
             </CardContent>
             <CardActions>
                 {

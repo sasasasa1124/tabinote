@@ -60,7 +60,6 @@ const PostForm = () => {
                         bootstrapURLKeys={{ key: process.env.MIX_GOOGLE_API }}
                         center={location}
                         defaultZoom={15}
-                        onClick={setLatLng}
                         onGoogleApiLoaded={handleApiLoaded}
                         ></GoogleMapReact>
                     </div>
@@ -97,12 +96,13 @@ const PostForm = () => {
                             name="image"
                             id="image-button-file"
                             onChange={handleImageUpload}
+                            capture
                             hidden
                             />
                             <IconButton color="primary" aria-label="upload picture" component="span">
-                            <PhotoCamera />
+                                Photo <PhotoCamera />
                             </IconButton>
-                        </label>
+                        </label>        
                         <label htmlFor="audio-button-file">
                             <input
                                 accept="audio/*" 
@@ -110,16 +110,14 @@ const PostForm = () => {
                                 name="audio"
                                 id='audio-button-file'
                                 onChange={handleAudioUpload}
+                                capture
                                 hidden
                             />
                                 <IconButton color="primary" aria-label="upload picture" component="span">
-                                <AudioFileIcon />
+                                    Audio <AudioFileIcon />
                                 </IconButton>
-                        </label>                        
+                        </label>
                     </FormGroup>
-
-
-
                 </FormGroup>
                 <LoadingButton
                     onClick={handleSubmit}
@@ -169,19 +167,6 @@ const PostForm = () => {
         }));
     }; 
 
-    function setLatLng({ x, y, lat, lng, event }){
-        if (marker) {
-          marker.setMap(null);
-        }
-        setLocation({lat:lat,lng:lng});
-        setPost({...post,lat:lat,lng:lng});
-        setMarker(new maps.Marker({
-          map,
-          position: {lat:lat,lng:lng},
-        }));
-        map.panTo({lat:lat,lng:lng});
-    };
-
     async function handleImageUpload(event) {
         const imageFile = event.target.files[0];
         console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
@@ -205,6 +190,8 @@ const PostForm = () => {
     function handleAudioUpload(event) {
         const audioFile = event.target.files[0];
         setAudio(audioFile);
+        const url = URL.createObjectURL(audioFile);
+        player.src = url;
     }
 
     async function uploadImage() {

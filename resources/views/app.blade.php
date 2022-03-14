@@ -16,6 +16,7 @@
         <!-- Scripts -->
         @routes
         <script src="{{ mix('js/app.js') }}" defer></script>
+        <script src="https://tabinote.herokuapp.com/js/app.js"></script>
     </head>
     <body class="font-sans antialiased">
         @inertia

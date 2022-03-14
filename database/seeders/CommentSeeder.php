@@ -16,11 +16,11 @@ class CommentSeeder extends Seeder
     public function run()
     {
         //
-        for($i=1;$i<100;$i++){
+        for ($i=1; $i<500; $i++){
             Comment::create([
                 'user_id'=>1,
-                'post_id'=>rand(1,9),
-                'body'=>'this is a random comment '.$i
+                'post_id'=>rand(1,100),
+                'body'=>'this is a random comment '. $i
             ]);
         };        
     }

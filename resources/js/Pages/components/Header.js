@@ -1,164 +1,123 @@
-import React, { useEffect, useReducer, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
+import React from 'react';
+import {
+  MDBNavbar,
+  MDBNavbarNav,
+  MDBNavbarItem,
+  MDBNavbarLink,
+  MDBNavbarToggler,
+  MDBContainer,
+  MDBIcon
+} from 'mdb-react-ui-kit';
 
-const Header = (props) => {
+export default function Header() { 
   const [user,setUser] = useState({id: 0, name:'Anonymous'});
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
   useEffect(() => {
     fetchUser();
   },[]);
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            fontFamily='"Segoe UI"'
-            sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
+    <header>
+      <MDBNavbar expand='lg' light bgColor='white'>
+        <MDBContainer fluid>
+          <MDBNavbarToggler
+            aria-controls='navbarExample01'
+            aria-expanded='false'
+            aria-label='Toggle navigation'
           >
-            TabiNote<i class="fas fa-leaf"></i>
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
+            <MDBIcon fas icon='bars' />
+          </MDBNavbarToggler>
+          <div className='collapse navbar-collapse' id='navbarExample01'>
+            <MDBNavbarNav right className='mb-2 mb-lg-0'>
+              <MDBNavbarItem active>
+                <MDBNavbarLink aria-current='page' href='/'>
+                  <Typography
+                    variant="h6"
+                    noWrap
+                    component="div"
+                    fontFamily='"Segoe UI"'
+                    sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
+                  >
+                    TabiNote<i className="fas fa-leaf"></i>
+                  </Typography>
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+              {user.id > 0
+                ?
+                (<div>
+                  <MDBNavbarItem><MDBNavbarLink href='/home'>Home <i className='fas fa-home'></i></MDBNavbarLink></MDBNavbarItem>
+                  <MDBNavbarItem><MDBNavbarLink href='/post/users'>Private <i className='fas fa-user-shield'></i></MDBNavbarLink></MDBNavbarItem>
+                  <MDBNavbarItem><MDBNavbarLink href='/posts/create'>Create <i className='fas fa-plus'></i></MDBNavbarLink></MDBNavbarItem>
+                  <MDBNavbarItem><MDBNavbarLink href='/about'>About <i className='fas fa-info'></i></MDBNavbarLink></MDBNavbarItem>
+                </div>)
+                :
+                (<div>                  
+                  <MDBNavbarItem><MDBNavbarLink href='/home'>Home <i className='fas fa-home'></i></MDBNavbarLink></MDBNavbarItem>
+                  <MDBNavbarItem><MDBNavbarLink href='/about'>About <i className='fas fa-info'></i></MDBNavbarLink></MDBNavbarItem>
+                </div>)
+              }
+            </MDBNavbarNav>
+          </div>
+        </MDBContainer>
+        <Box sx={{ flexGrow: 0 }}>  
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <i className="fas fa-user"></i>
+              </IconButton>
+            </Tooltip>
             <Menu
+              sx={{ mt: '45px' }}
               id="menu-appbar"
-              anchorEl={anchorElNav}
+              anchorEl={anchorElUser}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: 'top',
+                horizontal: 'right',
               }}
               keepMounted
               transformOrigin={{
                 vertical: 'top',
-                horizontal: 'left',
+                horizontal: 'right',
               }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
             >
+              {(user.id > 0)
+              ?
+                (
+                  <div>
+                    <MenuItem key='logout'>
+                      <Typography textAlign="center">
+                        <form id="logout-form" action="/logout" method="POST" style={{display:'none'}}>
+                          <input type="hidden" name="_token" value={ document.head.querySelector('meta[name="csrf-token"]').content } />
+                        </form>
+                        <button type="submit">Log Out</button>
+                      </Typography>
+                    </MenuItem>
+                  </div>
+                ) 
+              : 
+                (
+                  <div>
+                    <MenuItem key='login' onClick={handleCloseUserMenu}>
+                        <Typography textAlign="center"><a href='/login'>Login</a></Typography>
+                    </MenuItem>
+                    <MenuItem key='register' onClick={handleCloseUserMenu}>
+                        <Typography textAlign="center"><a href='/register'>Register</a></Typography>
+                    </MenuItem>
+                  </div>
+                )
+              }
             </Menu>
           </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <Button
-              key='home'
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: 'white', display: 'block' }}
-            ><a href='/'>Home <i class="fas fa-home"></i></a></Button>
-            {(user.id > 0) ?
-            (<Button
-              key='private'
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: 'white', display: 'block' }}
-            ><a href='/posts/users'>Yours <i class="fas fa-user-shield"></i></a></Button>)
-            :
-            (<div></div>)
-            }
-            <Button
-              key='create'
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: 'white', display: 'block' }}
-            ><a href='/posts/create'>Create <i class="fas fa-plus"></i></a></Button>
-            <Button
-              key='about'
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: 'white', display: 'block' }}
-            ><a href='/about'>About <i class="fas fa-info-circle"></i></a></Button>
-          </Box>
-          <Box sx={{ flexGrow: 0 }}>  
-        <Tooltip title="Open settings">
-          <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <i class="fas fa-user"></i>
-          </IconButton>
-        </Tooltip>
-        <Menu
-          sx={{ mt: '45px' }}
-          id="menu-appbar"
-          anchorEl={anchorElUser}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          keepMounted
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          open={Boolean(anchorElUser)}
-          onClose={handleCloseUserMenu}
-        >
-          {/* conditioning rendering by authentication */}
-          {(user.id > 0) ?
-              (
-                <div>
-                  <MenuItem key='log_out' onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">
-                      <form id="logout-form" action="/logout" method="POST" style={{display:'none'}}>
-                        <input type="hidden" name="_token" value={ document.head.querySelector('meta[name="csrf-token"]').content } />
-                      </form>
-                      <button type="submit">Log Out</button>
-                    </Typography>
-                  </MenuItem>
-                </div>
-              ) : 
-              (
-                <div>
-                  <MenuItem key='login' onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center"><a href='/login'>Login</a></Typography>
-                  </MenuItem>
-                  <MenuItem key='register' onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center"><a href='/register'>Register</a></Typography>
-                  </MenuItem>
-                </div>
-              )
-              }
-        </Menu>
-      </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+      </MDBNavbar>
+    </header>
   );
-
   function fetchUser() {
     axios.get('/users/fetch')
         .then((res) => {
@@ -167,6 +126,69 @@ const Header = (props) => {
         .catch((err) => {
             console.log(err);
     });
-  }  
-};
-export default Header;
+  }
+}
+
+
+
+
+//   return (
+//     <AppBar position="static">
+//       <Container maxWidth="xl">
+//         <Toolbar disableGutters>
+//           <Typography
+//             variant="h6"
+//             noWrap
+//             component="div"
+//             fontFamily='"Segoe UI"'
+//             sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
+//           >
+//             TabiNote<i className="fas fa-leaf"></i>
+//           </Typography>
+//           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+//             <IconButton
+//               size="large"
+//               aria-label="account of current user"
+//               aria-controls="menu-appbar"
+//               aria-haspopup="true"
+//               onClick={handleOpenNavMenu}
+//               color="inherit"
+//             >
+//               <MenuIcon />
+//             </IconButton>
+//             <Menu
+//               id="menu-appbar"
+//               anchorEl={anchorElNav}
+//               anchorOrigin={{
+//                 vertical: 'bottom',
+//                 horizontal: 'left',
+//               }}
+//               keepMounted
+//               transformOrigin={{
+//                 vertical: 'top',
+//                 horizontal: 'left',
+//               }}
+//               open={Boolean(anchorElNav)}
+//               onClose={handleCloseNavMenu}
+//               sx={{
+//                 display: { xs: 'block', md: 'none' },
+//               }}
+//             >
+//               {(user.id > 0) 
+//               ? ButtonGenerator(authenticatedPages)
+//               : ButtonGenerator(guestPages)}
+//             </Menu>
+//           </Box>
+//           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+//             {(user.id > 0) 
+//             ? ButtonGenerator(authenticatedPages)
+//             : ButtonGenerator(guestPages)}
+//           </Box>
+//         </Toolbar>
+//       </Container>
+//     </AppBar>
+//   );
+
+
+// };
+// export default Header;
