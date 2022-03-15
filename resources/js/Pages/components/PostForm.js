@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
 import axios from 'axios';
 import GoogleMapReact from 'google-map-react';
 import {
@@ -15,7 +14,6 @@ import SendIcon from '@mui/icons-material/Send';
 import imageCompression from 'browser-image-compression';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import AudioFileIcon from '@mui/icons-material/AudioFile';
-import { Form } from 'react-bootstrap';
 
 const PostForm = () => {
     const [user,setUser] = useState({id: 0, name:'Anonymous'});

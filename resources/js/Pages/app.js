@@ -14,11 +14,7 @@ import {
     Routes,
     Route
 } from "react-router-dom";
-import {
-    Container,
-    Row,
-    Col
-} from 'react-bootstrap';
+import { Container } from '@mui/material';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -34,8 +30,7 @@ function App() {
     return (
         <div className='App'>
             <Container>
-                <Row><Header></Header></Row>
-                <Row>
+                <Header></Header>
                     <Router>                            
                         <Routes>
                             <Route exact path="/" element={<Home />} />
@@ -47,8 +42,7 @@ function App() {
                             <Route element={<NotFound />} />
                         </Routes>
                     </Router>
-                </Row>
-                <Row><Footer></Footer></Row>
+                <Footer></Footer>
             </Container>
         </div>
     );

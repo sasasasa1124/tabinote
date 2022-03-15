@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
-import axios from 'axios';
 import GoogleMapReact from 'google-map-react';
 import PostCard from './PostCard';
-import { Container } from 'react-bootstrap';
+import { Container } from '@mui/material';
 
 const PostIndex = (props) => {
     const defaultCenter = props.defaultCenter;

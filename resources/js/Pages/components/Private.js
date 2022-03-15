@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import PostIndex from './PostIndex';
-import {
-    Container
-} from 'react-bootstrap';
+import { Container } from '@mui/material';
 
 const Private = () => {
     const [location,setLocation] = useState({})
